@@ -69,9 +69,9 @@ const ListFilters = ({ filters, filtersActive, catchFiler, setFiltersActive, set
   };
 
   const handleDeleteFilter = (filter) => {
-    // Sử dụng SweetAlert để xác nhận việc xóa
+    // Sử dụng SweetAlert để xác nhận việc lưu chỉnh sửa
     Swal.fire({
-      title: "Bạn chắc chắn muốn xóa bộ lọc này?",
+      title: "Bạn chắc chắn muốn lưu chỉnh sửa bộ lọc này?",
       text: "Thao tác này không thể hoàn tác!",
       icon: "warning",
       showCancelButton: true,
