@@ -39,7 +39,13 @@ const Filter = () => {
   const [isLogin, setIsLogin] = useState(localStorage.getItem("_il"));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
-  const [selectedItems, setSelectedItems] = useState(["floor", "gia_hien_tai_cat_len_ma", "PE", "marketCap", "totalVol"]);
+  const [selectedItems, setSelectedItems] = useState([
+    "floor",
+    "gia_hien_tai_cat_len_ma",
+    "PE",
+    "marketCap",
+    "totalVol",
+  ]);
   const [components, setComponents] = useState([]);
 
   const [data, setData] = useState([]);
@@ -386,6 +392,7 @@ const Filter = () => {
                     filtersActive={filtersActive}
                     selectedItems={selectedItems}
                     setFilters={setFilters}
+                    isLogin={isLogin}
                   />
                 </div>
                 <div className="mt-1">
