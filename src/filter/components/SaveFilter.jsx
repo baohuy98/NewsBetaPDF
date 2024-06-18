@@ -7,7 +7,7 @@ import { postApi } from "../../helper/postApi";
 
 const apiUrl = process.env.REACT_APP_BASE_URL;
 
-const SaveFilter = ({ selectedItems, setFilters, filtersActive }) => {
+const SaveFilter = ({ selectedItems, setFilters, filtersActive, isLogin }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -62,7 +62,11 @@ const SaveFilter = ({ selectedItems, setFilters, filtersActive }) => {
   };
 
   const saveFilter = async () => {
-    await postApi(apiUrl, `/api/v1/investment/update-filter/${filtersActive.filter_id}`, { name: filtersActive.name, value: selectedItems });
+    await postApi(
+      apiUrl,
+      `/api/v1/investment/update-filter/${filtersActive.filter_id}`,
+      { name: filtersActive.name, value: selectedItems }
+    );
 
     fetchDataFilters();
 
@@ -124,6 +128,7 @@ const SaveFilter = ({ selectedItems, setFilters, filtersActive }) => {
               </Form.Item>
               <Form.Item className="btnStyle">
                 <Button
+                  disabled={isLogin !== "7MEvU"}
                   type="submit"
                   variant="text"
                   sx={{
@@ -131,6 +136,11 @@ const SaveFilter = ({ selectedItems, setFilters, filtersActive }) => {
                     color: "#ffba07",
                     fontSize: "18px",
                     textTransform: "none",
+                    "&.Mui-disabled": {
+                      cursor: "not-allowed",
+                      pointerEvents: "auto",
+                      color: "rgba(0, 0, 0, 0.5)",
+                    },
                   }}
                 >
                   Tạo bộ lọc
