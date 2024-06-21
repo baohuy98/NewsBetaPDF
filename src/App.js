@@ -1,9 +1,10 @@
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Fragment, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { routes } from "./app/route";
 import { generateMAC } from "./helper/generateMAC";
-
 function App() {
   useEffect(() => {
     const deviceId = JSON.parse(localStorage.getItem("deviceId"));
@@ -23,9 +24,11 @@ function App() {
 
   return (
     <Fragment>
-      <BrowserRouter>
-        <Routes>{mappedRoute}</Routes>
-      </BrowserRouter>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <BrowserRouter>
+          <Routes>{mappedRoute}</Routes>
+        </BrowserRouter>
+      </LocalizationProvider>
     </Fragment>
   );
 }
