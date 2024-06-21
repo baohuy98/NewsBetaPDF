@@ -21,11 +21,11 @@ const Max = ({ data }) => {
             {data ? (
               <tr>
                 <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{data.name}</td>
-                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.total)}</td>
+                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.total * 100)}</td>
                 <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{data.count}</td>
-                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.max)}</td>
-                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.min)}</td>
-                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.total / data.count)}</td>
+                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.max * 100)}</td>
+                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.min * 100)}</td>
+                <td className="p-[16px] text-right text-black text-opacity-[88] text-[14px] border-b-[1px] border-solid border-[#f0f0f0] border-x-0 border-t-0">{formatNumberCurrency(data.total / data.count * 100)}</td>
               </tr>
             ) : (
               <tr>
