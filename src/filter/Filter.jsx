@@ -36,7 +36,9 @@ const theme = createTheme({
 
 const Filter = () => {
   const dispatch = useDispatch();
+
   const [isLogin, setIsLogin] = useState(localStorage.getItem("_il"));
+  const [role, setRole] = useState(localStorage.getItem("2ZW79"));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const [selectedItems, setSelectedItems] = useState([
@@ -107,6 +109,7 @@ const Filter = () => {
   const handleUserLogout = () => {
     if (isLogin) {
       setIsLogin(null);
+      setRole(null);
       dispatch(userLogoutAction());
       localStorage.setItem("_il", "4E8WL");
       localStorage.removeItem("user");
@@ -115,6 +118,7 @@ const Filter = () => {
 
   const onSubmitSuccess = () => {
     setIsLogin(localStorage.getItem("_il"));
+    setRole(localStorage.getItem("2ZW79"));
     setUser(JSON.parse(localStorage.getItem("user")));
   };
 
@@ -306,6 +310,7 @@ const Filter = () => {
           <NavBar
             isLogin={isLogin}
             user={user}
+            role={role}
             handleUserLogout={handleUserLogout}
             onSubmitSuccess={onSubmitSuccess}
           />
