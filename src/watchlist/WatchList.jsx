@@ -13,8 +13,11 @@ const apiUrl = process.env.REACT_APP_BASE_URL;
 const WatchList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = useState(localStorage.getItem("_il"));
+  const [role, setRole] = useState(localStorage.getItem("2ZW79"));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
   const [watchlists, setWatchlists] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -39,6 +42,7 @@ const WatchList = () => {
   const handleUserLogout = () => {
     if (isLogin) {
       setIsLogin(null);
+      setRole(null);
       dispatch(userLogoutAction());
       localStorage.setItem("_il", "4E8WL");
       localStorage.removeItem("user");
@@ -48,6 +52,7 @@ const WatchList = () => {
 
   const onSubmitSuccess = () => {
     setIsLogin(localStorage.getItem("_il"));
+    setRole(localStorage.getItem("2ZW79"));
     setUser(JSON.parse(localStorage.getItem("user")));
   };
 
@@ -63,6 +68,7 @@ const WatchList = () => {
         <NavBar
           isLogin={isLogin}
           user={user}
+          role={role}
           handleUserLogout={handleUserLogout}
           onSubmitSuccess={onSubmitSuccess}
         />

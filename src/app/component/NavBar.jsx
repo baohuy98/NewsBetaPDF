@@ -14,7 +14,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import DialogLogin from "../../Auth/components/DialogLogin";
 import DialogSignUp from "../../Auth/components/DialogSignUp";
 
-const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user }) => {
+const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user, role }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [positionBackToTopBtn, setPositionBackToTopBtn] = useState(20);
   const [hasScrollbar, setHasScrollbar] = useState(false);
@@ -137,20 +137,24 @@ const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user }) => {
               >
                 Phân tích
               </h3>
-              <NavLink
-                to={"/phan-tich-ky-thuat/FPT"}
-                className={
-                  activeNav.split("/").slice(0, -1).join("/") ===
-                  "/phan-tich-ky-thuat"
-                    ? "no-underline block text-white bg-[#1E5D8B] hover:bg-[#1E5D8B] hover:text-white px-2 py-2 my-3 rounded-md text-base font-medium border border-solid border-collapse border-[#1E5D8B]"
-                    : "no-underline block text-black hover:bg-[#1E5D8B] hover:text-white px-2 py-2 my-3 rounded-md text-base font-medium border border-solid border-collapse border-[#1E5D8B]"
-                }
-              >
-                <span className="px-2">
-                  <SlGraph />
-                </span>
-                Phân tích kỹ thuật
-              </NavLink>
+              {role === "V0U1S" ? (
+                <NavLink
+                  to={"/phan-tich-ky-thuat/FPT"}
+                  className={
+                    activeNav.split("/").slice(0, -1).join("/") ===
+                    "/phan-tich-ky-thuat"
+                      ? "no-underline block text-white bg-[#1E5D8B] hover:bg-[#1E5D8B] hover:text-white px-2 py-2 my-3 rounded-md text-base font-medium border border-solid border-collapse border-[#1E5D8B]"
+                      : "no-underline block text-black hover:bg-[#1E5D8B] hover:text-white px-2 py-2 my-3 rounded-md text-base font-medium border border-solid border-collapse border-[#1E5D8B]"
+                  }
+                >
+                  <span className="px-2">
+                    <SlGraph />
+                  </span>
+                  Phân tích kỹ thuật
+                </NavLink>
+              ) : (
+                <></>
+              )}
               <NavLink
                 to={"/phan-tich-ky-thuat-tu-dong/FPT"}
                 className={
