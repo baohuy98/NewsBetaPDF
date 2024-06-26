@@ -1,6 +1,6 @@
 import { Modal, Table, Tooltip } from "antd";
 import React, { useState } from "react";
-import formatNumberCurrency from "../../helper/formatNumberCurrency";
+import formatNumberCurrency from "../../../helper/formatNumberCurrency";
 
 const ListResults = ({ data }) => {
   const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
@@ -54,7 +54,7 @@ const ListResults = ({ data }) => {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Tổng hiệu suất sinh lời",
+      title: "Tổng hiệu suất sinh lời (%)",
       dataindex: "total",
       align: "center",
       width: 250,
@@ -76,7 +76,7 @@ const ListResults = ({ data }) => {
       sorter: (a, b) => a.count - b.count,
     },
     {
-      title: "Hiệu suất sinh lời max",
+      title: "Hiệu suất sinh lời max (%)",
       dataindex: "max",
       align: "center",
       width: 250,
@@ -88,7 +88,7 @@ const ListResults = ({ data }) => {
       sorter: (a, b) => a.max - b.max,
     },
     {
-      title: "Hiệu suất sinh lời min",
+      title: "Hiệu suất sinh lời min (%)",
       dataindex: "min",
       align: "center",
       width: 250,
@@ -100,7 +100,7 @@ const ListResults = ({ data }) => {
       sorter: (a, b) => a.min - b.min,
     },
     {
-      title: "Hiệu suất sinh lời trung bình",
+      title: "Hiệu suất sinh lời trung bình (%)",
       align: "center",
       render: (_, record) => {
         return (
@@ -155,7 +155,7 @@ const ListResults = ({ data }) => {
       sorter: (a, b) => a.price_sell - b.price_sell,
     },
     {
-      title: "Hiệu suất sinh lời",
+      title: "Hiệu suất sinh lời (%)",
       align: "profit",
       render: (_, record) => {
         return (
