@@ -60,13 +60,9 @@ const ScatterChart = ({ data }) => {
       title: {
         align: "high",
         offset: 0,
-        text: "Hiệu suất",
+        text: "Hiệu suất (%)",
         rotation: 0,
         y: -15,
-        x: -8,
-      },
-      labels: {
-        format: "{value} %",
       },
     },
     legend: {
@@ -89,7 +85,7 @@ const ScatterChart = ({ data }) => {
       pointFormat: "MA {point.name} <br/> Hiệu suất: {point.y} %",
     },
     series: series,
-    colors: ["rgb(255,255,255)"],
+    colors: ["rgb(255,255,255)"], //Fill color marker
   };
   return (
     <div className="h-[237px]">
