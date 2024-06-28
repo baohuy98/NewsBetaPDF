@@ -204,6 +204,7 @@ const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user, role }) => {
                 <MdQueryStats />,
                 "Chiến lược giao dịch"
               )}
+              {buttonNavLink("/beta-smart", <MdQueryStats />, "BETA SMART")}
             </div>
           </div>
         </div>

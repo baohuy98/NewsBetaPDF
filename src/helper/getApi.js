@@ -3,14 +3,20 @@ import Cookies from "js-cookie";
 import { refreshTokenAction } from "./postApi";
 
 export const getApi = async (apiUrl, url) => {
+  const headers = {
+    mac: localStorage.getItem("deviceId"),
+  };
+
+  const token = Cookies.get("at");
+  if (token) {
+    headers.Authorization = "Bearer " + token;
+  }
+
   try {
     const response = await axios
       .create({
         baseURL: apiUrl,
-        headers: {
-          mac: localStorage.getItem("deviceId"),
-          Authorization: "Bearer " + Cookies.get("at"),
-        },
+        headers: headers,
       })
       .get(url);
     return response.data.data;
@@ -20,10 +26,7 @@ export const getApi = async (apiUrl, url) => {
       const response = await axios
         .create({
           baseURL: apiUrl,
-          headers: {
-            mac: localStorage.getItem("deviceId"),
-            Authorization: "Bearer " + Cookies.get("at"),
-          },
+          headers: headers,
         })
         .get(url);
       return response.data.data;

@@ -23,7 +23,7 @@ const NavBar2 = () => {
   };
 
   useEffect(() => {
-    document.title = "Bộ lọc";
+    document.title = "BETA SMART";
   }, []);
 
   return (
@@ -36,7 +36,7 @@ const NavBar2 = () => {
           onSubmitSuccess={onSubmitSuccess}
         />
       </div>
-      Bộ lọc
+      BETA SMART
     </div>
   );
 };

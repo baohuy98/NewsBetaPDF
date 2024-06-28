@@ -25,4 +25,5 @@ export const routes = [
   { path: "/bo-loc", component: Filter },
   { path: "/canh-bao-tin-hieu", component: NavBar3 },
   { path: "/chien-luoc-giao-dich", component: TradingStrategies },
+  { path: "/beta-smart", component: NavBar2 },
 ];
