@@ -98,7 +98,11 @@ const TradingStrategies = () => {
                             value={strategy.key}
                             onChange={() => handleStrategyChange(strategy.key)}
                           >
-                            {strategy.name}
+                            {strategy.name === "MA VVIP"
+                              ? role === "V0U1S"
+                                ? "MA VVIP"
+                                : "MA đại pháp"
+                              : strategy.name}
                           </Checkbox>
                         </div>
                       ))}
@@ -116,10 +120,10 @@ const TradingStrategies = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1 }}
                   >
-                    <div className="flex flex-col justify-center items-center bg-[#D6EBFF] bg-opacity-70 w-[500px] h-[250px] border-solid border-[#0669FC] border-opacity-20 rounded-[25px]">
+                    <div className="flex flex-col justify-center items-center bg-[#D6EBFF] bg-opacity-70 w-[500px] h-[250px] border-solid border-[#0669FC] border-opacity-20 rounded-[25px] mr-[300px]">
                       <PiChartLineUpBold className="w-[60px] h-[60px]" />
                       <div className="p-7">
-                        Xin chào quý nhà đầu tư{" "}
+                        Xin chào quý nhà đầu tư
                         <span className="font-bold"></span>
                       </div>
                       <div>Vui lòng chọn chiến lược giao dịch</div>

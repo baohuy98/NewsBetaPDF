@@ -1,6 +1,6 @@
 export const selectTradingStrategy = {
   "Thuận theo xu hướng": [
-    { name: "MA đại pháp", key: "StrategyMA" },
+    { name: "MA VVIP", key: "StrategyMA" },
     { name: "Nội dung đoạn văn bản của bạn", key: "1" },
     { name: "Nội dung đoạn văn bản của bạn", key: "2" },
     { name: "Nội dung đoạn văn bản của bạn", key: "3" },
