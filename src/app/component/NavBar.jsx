@@ -6,8 +6,10 @@ import { BiCategoryAlt } from "react-icons/bi";
 import { BsCalendar2Day, BsGraphUp } from "react-icons/bs";
 import { CiFilter } from "react-icons/ci";
 import { FiChevronsLeft, FiChevronsRight, FiSunset } from "react-icons/fi";
+import { HiOutlineLightBulb } from "react-icons/hi";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdOutlineAutoGraph, MdQueryStats } from "react-icons/md";
+import { PiPresentationChartLight } from "react-icons/pi";
 import { SlGraph } from "react-icons/sl";
 import { VscCoffee } from "react-icons/vsc";
 import { NavLink, useLocation } from "react-router-dom";
@@ -204,7 +206,23 @@ const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user, role }) => {
                 <MdQueryStats />,
                 "Chiến lược giao dịch"
               )}
-              {buttonNavLink("/beta-smart", <MdQueryStats />, "BETA SMART")}
+              {buttonNavLink(
+                "/beta-smart",
+                <HiOutlineLightBulb />,
+                "BETA SMART"
+              )}
+
+              {role === "V0U1S" ? (
+                <div>
+                  {buttonNavLink(
+                    "/trading-tool",
+                    <PiPresentationChartLight />,
+                    "Trading Tool"
+                  )}
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>

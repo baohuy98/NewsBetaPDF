@@ -329,6 +329,9 @@ const TableResults = ({ filteredResults, watchlists, catchWatchlists, selectedIt
     "macd_dang_o_duoi_duong_0",
     "macd_dang_o_tren_duong_0",
     "macd_dang_o_tren_duong_tin_hieu",
+    "changeStatusTrend",
+    "changeStatusTech",
+    "changeStatusGeneral",
     ""
   ];
 

@@ -5,15 +5,18 @@
 }
 
 .custom-flash-down {
-    background-color: rgba(255, 0, 0, 0.5) !important; /* Red with opacity */
+    background-color: lightcoral !important; 
+    color: white !important;
 }
   
 .custom-flash-up {
-    background-color: rgba(0, 255, 0, 0.5) !important; /* Green with opacity */
+    background-color: lightgreen !important; 
+    color: white !important;
 }
 
 .custom-flash-ref {
-    background-color: transparent !important; /* Green with opacity */
+    background-color: rgb(224, 224, 19) !important; 
+    color: white !important;
 }
 
 .ag-theme-quartz {
@@ -21,15 +24,16 @@
 }
 
 .example-wrapper .ag-header {
-    background-color: #278AFF;
+    background-color: #0050AD ;
 }
 
 .example-wrapper .ag-header-cell-text {
     font-size: 15px;
     font-weight: 700;
+    color: white;
 }
 
 .example-wrapper .ag-root-wrapper {
-    border: 0;
+    border: 1px solid #0050AD;
     border-radius: 0;
 }
