@@ -94,9 +94,9 @@ const SaveFilter = ({ selectedItems, setFilters, filtersActive, isLogin }) => {
     <div>
       {contextHolder}
       {filtersActive === "" ? (
-        <Button variant="contained" onClick={showModal}>
-          <MdSaveAlt className="w-[25px] h-[25px]" />
-          <span className="normal-case pl-1 text-[14px] font-semibold">
+        <Button variant="contained" color="mau" onClick={showModal}>
+          <MdSaveAlt className="w-[25px] h-[25px] text-white" />
+          <span className="normal-case pl-1 text-[14px] font-semibold text-white">
             Lưu bộ lọc
           </span>
         </Button>

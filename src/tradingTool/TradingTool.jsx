@@ -1,19 +1,21 @@
+import { LoadingButton } from "@mui/lab";
+import { Button, TextField } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
+import { Modal } from "antd";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FaPlusCircle } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { userLogoutAction } from "../Auth/thunk.js";
 import NavBar from "../app/component/NavBar.jsx";
 import { getApi } from "../helper/getApi.js";
+import { postApi } from "../helper/postApi.js";
 import socket from "../helper/socket.js";
 import ActionComponents from "./components/ActionComponents.jsx";
 import DetailComponents from "./components/DetailComponents.jsx";
 import "./utils/styles/styles.css";
-import { Button, TextField } from "@mui/material";
-import { Modal } from "antd";
-import { postApi } from "../helper/postApi.js";
-import { LoadingButton } from "@mui/lab";
 
 const apiUrl = process.env.REACT_APP_BASE_URL;
 const flashClass = {
@@ -24,12 +26,23 @@ const flashClass = {
 
 const getColor = (item) => {
   let color = "";
+
   if (item === 0) color = "text-yellow-500";
   else if (item < 0) color = "text-red-500";
   else color = "text-green-500";
 
   return color;
 };
+
+const theme = createTheme({
+  palette: {
+    test: {
+      light: "#25558d",
+      main: "#0050AD",
+      dark: "#0b3c74",
+    },
+  },
+});
 
 const TradingTool = () => {
   const dispatch = useDispatch();
@@ -82,8 +95,8 @@ const TradingTool = () => {
           p_2024,
           p_2025,
           ma: parseFloat((item.ma / 1000).toFixed(2)),
-          change: parseFloat((((item.closePrice - item.closePricePrev) / item.closePricePrev) * 100 ).toFixed(2)),
-          perChange: parseFloat((((item.closePrice - item.closePricePrev) / item.closePricePrev) * 100).toFixed(2)) + "%",
+          change: parseFloat(((item.closePrice - item.closePricePrev) / item.closePricePrev * 100).toFixed(2)),
+          perChange: parseFloat(((item.closePrice - item.closePricePrev) / item.closePricePrev * 100).toFixed(2)) + '%'
         };
       });
     setData(dataWithKey);
@@ -97,29 +110,26 @@ const TradingTool = () => {
   const gridRef = useRef();
 
   const columnDefs = [
-    { headerName: "Mã", field: "code", cellRenderer: DetailComponents, cellClass: (params) =>  getColor(params.data.change)},
-    { headerName: "Giá", field: "closePrice", cellClass: (params) =>  getColor(params.data.change) },
-    { headerName: "+/-", field: "change", cellClass: (params) =>  getColor(params.data.change) },
-    { headerName: "Giá mục tiêu 2024", field: "price_2024", },
-    { headerName: "Tiềm năng tăng giá 2024 (%)", field: "p_2024", },
-    { headerName: "Giá mục tiêu 2025", field: "price_2025", },
-    { headerName: "Tiềm năng tăng giá 2025 (%)", field: "p_2025", },
-    { headerName: "MA", field: "name", },
-    { headerName: "Giá trị MA", field: "ma", },
-    { headerName: "Hiệu suất sinh lời theo MA (%)", field: "total", },
-    { headerName: "Tín hiệu", field: "signal_text", cellClass: (params) =>  params.value == 'MUA' ? 'text-green-500' : (params.value == 'BÁN' ? 'text-red-500' : (params.value == 'Hold mua' ? 'text-green-500' : 'text-red-500'))},
-    { headerName: "", field: "actions", cellRenderer: (params)=> <ActionComponents params={params} setData={setData}/> },
+    { headerName: "Mã", field: "code", width: 90, cellRenderer: DetailComponents, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
+    { headerName: "Giá", field: "closePrice", width: 90, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' } },
+    { headerName: "+/-", field: "perChange", width: 90, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' } },
+    { headerName: "Giá mục tiêu 2024", field: "price_2024", width: 190, cellStyle: { textAlign: 'center' } },
+    { headerName: "Tiềm năng tăng giá 2024 (%)", field: "p_2024", width: 200, cellStyle: { textAlign: 'center' } },
+    { headerName: "Giá mục tiêu 2025", field: "price_2025", width: 190, cellStyle: { textAlign: 'center' } },
+    { headerName: "Tiềm năng tăng giá 2025 (%)", field: "p_2025", width: 200, cellStyle: { textAlign: 'center' } },
+    { headerName: "MA", field: "name", width: 110, cellStyle: { textAlign: 'center' } },
+    { headerName: "Giá trị MA", field: "ma", width: 130, cellStyle: { textAlign: 'center' } },
+    { headerName: "Hiệu suất sinh lời theo MA (%)", field: "total", width: 280, cellStyle: { textAlign: 'center' } },
+    { headerName: "Tín hiệu", field: "signal_text", width: 130, cellClass: (params) =>  params.value == 'MUA' ? 'text-green-500' : (params.value == 'BÁN' ? 'text-red-500' : (params.value == 'Hold mua' ? 'text-green-500' : 'text-red-500')), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
+    { headerName: "", field: "actions", width: 120, cellRenderer: (params)=> <ActionComponents params={params} setData={setData}/> },
   ];
-
+  
   const defaultColDef = useMemo(() => {
     return {
-        autoSizeStrategy: {
-            type: 'fitCellContents'
-        },
-        flex: 1,
-        resizable: false,
-        enableCellChangeFlash: true,
-        suppressMovable: true,
+      resizable: false,
+      enableCellChangeFlash: true,
+      suppressMovable: true,
+      wrapHeaderText: true
     };
   }, []);
 
@@ -153,48 +163,54 @@ const TradingTool = () => {
           const rowNode = gridRef?.current?.api?.getRowNode(newItem.code);
 
           if (rowNode) {
-            const updateColumnData = (colId, newValue, flashClass, newItem) => {
-              const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
+            const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
+            const columnIds = ["closePrice", "perChange", "ma", "p_2024", "p_2025", "total"];
+            const className = newClosePrice > closePricePrev ? flashClass.up : (newClosePrice < closePricePrev ? flashClass.down : flashClass.ref);
+
+             // Add the class name for visual feedback
+            columnIds.forEach(colId => {
               const cellElement = rowElement?.querySelector(`[col-id="${colId}"]`);
-
-              const oldValue = rowNode.data[colId];
-
-              if (colId === 'signal_text') {
-                if (newItem.signal_text !== oldValue) {
-                  if (newItem.signal === 0 || newItem.signal === 2) {
-                    cellElement?.classList.add(flashClass.up);
-                  } else {
-                    cellElement?.classList.add(flashClass.down);
-                  }
-                }
-              } else {
-                if (oldValue < newValue) {
-                  cellElement?.classList.add(flashClass.up);
-                } else if (oldValue > newValue) {
-                  cellElement?.classList.add(flashClass.down);
-                } else {
-                  cellElement?.classList.add(flashClass.ref);
-                }
+              if (cellElement) {
+                cellElement.classList.add(className);
               }
+            });
 
-              rowNode.setDataValue(colId, newValue);
+            // Update the cell values
+            columnIds.forEach(colId => {
+              if (newItem.hasOwnProperty(colId)) {
+                rowNode.setDataValue(colId, newItem[colId]);
+              }
+            });
 
-              setTimeout(() => {
-                cellElement?.classList.remove(
-                  flashClass.up,
-                  flashClass.down,
-                  flashClass.ref
-                );
-              }, 500);
-            };
+            // Remove the class names after 500 milliseconds
+            setTimeout(() => {
+              columnIds.forEach(colId => {
+                const cellElement = rowElement?.querySelector(`[col-id="${colId}"]`);
+                if (cellElement) {
+                  cellElement.classList.remove(flashClass.up, flashClass.down, flashClass.ref);
+                }
+              });
+            }, 500);
 
-            updateColumnData("closePrice", newItem.closePrice, flashClass, newItem);
-            updateColumnData("change", newItem.change, flashClass, newItem);
-            updateColumnData("p_2024", newItem.p_2024, flashClass, newItem);
-            updateColumnData("p_2025", newItem.p_2025, flashClass, newItem);
-            updateColumnData("ma", newItem.ma, flashClass, newItem);
-            updateColumnData("total", newItem.total, flashClass, newItem);
-            updateColumnData("signal_text", newItem.signal_text, flashClass, newItem);}
+          }
+
+          const signal = newData[0].signal == 0 ? 'MUA' : (newData[0].signal == 1 ? 'BÁN': (newData[0].signal == 2 ? 'Hold mua' : 'Hold bán')) 
+          if (rowNode && (item.signal != signal)) {
+            const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
+            const childElementSignal = rowElement?.querySelector('[col-id="signal_text"]')
+            const classNameSignal = (newData[0].signal == 0 || newData[0].signal == 2) ? flashClass.up : flashClass.down
+
+            // Add the class name for visual feedback
+            childElementSignal?.classList.add(classNameSignal)
+
+            // Update the signal value
+            rowNode.setDataValue('signal_text', signal);
+
+            // Remove the class name after 500 milliseconds
+            setTimeout(() => {
+                childElementSignal?.classList.remove(classNameSignal)
+            }, 500)
+          }
         }
       });
     }
@@ -261,59 +277,66 @@ const TradingTool = () => {
   }
 
   return (
-    <div className="relative">
-      <div className="absolute right-[10%] top-[1%]">
-        <NavBar
-          isLogin={isLogin}
-          user={user}
-          role={role}
-          handleUserLogout={handleUserLogout}
-          onSubmitSuccess={onSubmitSuccess}
-        />
-      </div>
-      
-      <div className="w-full h-[919px] p-[40px]">
-        <div className="flex justify-start content-center mb-[15px]">
-            <div>
-                <Button onClick={showModalAdd}>Thêm mã</Button>
-            </div>
+    <ThemeProvider theme={theme}>
+      <div className="relative">
+        <div className="absolute right-[10%] top-[1%]">
+          <NavBar
+            isLogin={isLogin}
+            user={user}
+            role={role}
+            handleUserLogout={handleUserLogout}
+            onSubmitSuccess={onSubmitSuccess}
+          />
         </div>
-        <div className="w-full h-[787px]">
-          <div className="example-wrapper">
-            <div className={"ag-theme-quartz w-full h-full"}>
-              <AgGridReact
-                ref={gridRef}
-                rowData={data}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                getRowId={getRowId}
-                suppressRowHoverHighlight={true}
-                animateRows={true}
-              />
+      
+        <div className="w-full h-[919px] p-[40px]">
+          <div className="flex justify-start content-center mb-[15px]">
+              <div>
+                <Button variant="contained" color="test" onClick={showModalAdd}>
+                  <FaPlusCircle className="w-[20px] h-[20px] text-white" />
+                  <span className="normal-case pl-1 text-[14px] font-semibold text-white">
+                    Thêm mã
+                  </span>
+                </Button>
+              </div>
+          </div>
+          <div className="w-full h-[787px]">
+            <div className="example-wrapper">
+              <div className={"ag-theme-quartz w-full h-full"}>
+                <AgGridReact
+                  ref={gridRef}
+                  rowData={data}
+                  columnDefs={columnDefs}
+                  defaultColDef={defaultColDef}
+                  getRowId={getRowId}
+                  suppressRowHoverHighlight={true}
+                  animateRows={true}
+                />
+              </div>
             </div>
           </div>
         </div>
+        <Modal
+          centered
+          width={500}
+          open={isModalAddOpen}
+          onOk={handleAddOk}
+          onCancel={handleAddCancel}
+          footer={null}
+          className="detail-conditions"
+        >
+          <div className="h-fit m-[15px]">
+            <form onSubmit={handleSubmitCreate}>
+              <TextField label="Mã" fullWidth className="!mb-[20px]" />
+              <TextField label="Giá mục tiêu 2024" fullWidth className="!mb-[20px]" />
+              <TextField label="Giá mục tiêu 2025" fullWidth className="!mb-[20px]" />
+              <TextField label="MA" fullWidth className="!mb-[20px]" />
+              <LoadingButton variant="contained" type="submit" fullWidth loading={loading}>Thêm mã</LoadingButton>
+            </form>
+          </div>
+        </Modal>
       </div>
-      <Modal
-        centered
-        width={500}
-        open={isModalAddOpen}
-        onOk={handleAddOk}
-        onCancel={handleAddCancel}
-        footer={null}
-        className="detail-conditions"
-      >
-        <div className="h-fit m-[15px]">
-          <form onSubmit={handleSubmitCreate}>
-            <TextField label="Mã" fullWidth className="!mb-[20px]" />
-            <TextField label="Giá mục tiêu 2024" fullWidth className="!mb-[20px]" />
-            <TextField label="Giá mục tiêu 2025" fullWidth className="!mb-[20px]" />
-            <TextField label="MA" fullWidth className="!mb-[20px]" />
-            <LoadingButton variant="contained" type="submit" fullWidth loading={loading}>Thêm mã</LoadingButton>
-          </form>
-        </div>
-      </Modal>
-    </div>
+    </ThemeProvider>
   );
 };
 
