@@ -1,7 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { IconButton, TextField } from "@mui/material";
-import { Form, Modal, message } from "antd";
-import { useFormik } from "formik";
+import { Modal } from "antd";
 import React, { useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -11,7 +10,6 @@ import { postApi } from "../../helper/postApi";
 const apiUrl = process.env.REACT_APP_BASE_URL;
 
 export default ({ params, setData }) => {
-  const [messageApi, contextHolder] = message.useMessage();
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [dataEdit, setDataEdit] = useState();
   const [loading, setLoading] = useState(false)
@@ -27,13 +25,6 @@ export default ({ params, setData }) => {
 
   const handleEditCancel = () => {
     setIsModalEditOpen(false);
-  };
-
-  const warning = (type, text) => {
-    messageApi.open({
-      type,
-      content: text,
-    });
   };
 
   const handleDelete = (code) => {
@@ -56,8 +47,7 @@ export default ({ params, setData }) => {
         setData((prev) => {
           const newData = [...prev].filter(item => item.code != code)
           return newData
-      })
-        warning("success", `Đã xóa mã ${code} thành công!`);
+        })
       }
     });
   };
@@ -97,17 +87,15 @@ export default ({ params, setData }) => {
             }
             return newData
         })
-        
         setLoading(false)
     } catch (e) {
         setLoading(false)
         console.error(e);
     }
-}
+  }
 
   return (
     <div>
-      {contextHolder}
       <IconButton
         color="primary"
         aria-label="Edit"

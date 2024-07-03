@@ -37,3 +37,11 @@
     border: 1px solid #0050AD;
     border-radius: 0;
 }
+
+.example-wrapper .ag-header-cell-label {
+    justify-content: center;
+}
+
+.example-wrapper .ag-header-cell-text {
+    text-align: center;
+}

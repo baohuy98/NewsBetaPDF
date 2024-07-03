@@ -21,7 +21,7 @@ const flatFilter = Object.values(hashTbStockFilter).flat();
 
 const theme = createTheme({
   palette: {
-    primary: {
+    mau: {
       light: "#25558d",
       main: "#0D4381",
       dark: "#0b3c74",
@@ -401,9 +401,9 @@ const Filter = () => {
                   />
                 </div>
                 <div className="mt-1">
-                  <Button variant="contained" onClick={clearConditions}>
-                    <FiFilePlus className="w-[25px] h-[25px]" />
-                    <span className="normal-case pl-1 text-[14px] font-semibold">
+                  <Button variant="contained" color="mau" onClick={clearConditions}>
+                    <FiFilePlus className="w-[25px] h-[25px] text-white" />
+                    <span className="normal-case pl-1 text-[14px] font-semibold text-white" >
                       Tạo bộ lọc mới
                     </span>
                   </Button>
