@@ -14,7 +14,7 @@ import { getApi } from "../../helper/getApi";
 
 const apiUrl = process.env.REACT_APP_BASE_URL;
 
-const StrategyMA = ({ role }) => {
+const StrategyMAVVIP = () => {
   const [data, setData] = useState();
   const [dataStocks, setDataStocks] = useState([]);
   const [stock, setStock] = useState("");
@@ -65,7 +65,6 @@ const StrategyMA = ({ role }) => {
           `/api/v1/investment/test?stock=${stock}&from=${dayjs(fromDate).format(
             "YYYY-MM-DD"
           )}&to=${dayjs(toDate).format("YYYY-MM-DD")}`,
-          1
         );
         setData(data);
       } catch (error) {
@@ -335,9 +334,7 @@ const StrategyMA = ({ role }) => {
                   </p>
                 </div>
                 <div className="flex justify-between items-center text-[16px] py-1 px-3">
-                  <p className="m-1 w-[75%]">
-                    Hiệu suất sinh lời trung bình (%)
-                  </p>
+                  <p className="m-1 w-[75%]">Hiệu suất sinh lời trung bình (%)</p>
                   <p className="m-1">:</p>
                   <p className="m-1 w-[25%] text-end font-semibold text-[#0050AD]">
                     {formatNumberCurrency(
@@ -397,9 +394,7 @@ const StrategyMA = ({ role }) => {
                   <p className="m-1 w-[25%] text-end font-semibold text-[#0050AD]"></p>
                 </div>
                 <div className="flex justify-between items-center text-[16px] py-1 px-3">
-                  <p className="m-1 w-[75%]">
-                    Hiệu suất sinh lời trung bình (%)
-                  </p>
+                  <p className="m-1 w-[75%]">Hiệu suất sinh lời trung bình (%)</p>
                   <p className="m-1">:</p>
                   <p className="m-1 w-[25%] text-end font-semibold text-[#0050AD]"></p>
                 </div>
@@ -418,4 +413,4 @@ const StrategyMA = ({ role }) => {
   );
 };
 
-export default StrategyMA;
+export default StrategyMAVVIP;

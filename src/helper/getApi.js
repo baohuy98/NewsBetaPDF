@@ -2,27 +2,20 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { refreshTokenAction } from "./postApi";
 
-export const getApi = async (apiUrl, url) => {
-  const headers = {
-    mac: localStorage.getItem("deviceId"),
-  };
+export const getApi = async (apiUrl, url, type) => {
+  if (type === 1) {
+    const headers = {
+      mac: localStorage.getItem("deviceId"),
+    };
 
-  const token = Cookies.get("at");
-  if (token) {
-    headers.Authorization = "Bearer " + token;
-  }
+    const token = Cookies.get("at");
+    if (token) {
+      headers.Authorization = "Bearer " + token;
+    }
 
-  try {
-    const response = await axios
-      .create({
-        baseURL: apiUrl,
-        headers: headers,
-      })
-      .get(url);
-    return response.data.data;
-  } catch (err) {
-    if (err.response.status === 401) {
-      await refreshTokenAction();
+    delete headers.Authorization;
+
+    try {
       const response = await axios
         .create({
           baseURL: apiUrl,
@@ -30,8 +23,51 @@ export const getApi = async (apiUrl, url) => {
         })
         .get(url);
       return response.data.data;
-    } else {
-      console.error(err);
+    } catch (err) {
+      if (err.response.status === 401) {
+        await refreshTokenAction();
+        const response = await axios
+          .create({
+            baseURL: apiUrl,
+            headers: headers,
+          })
+          .get(url);
+        return response.data.data;
+      } else {
+        console.error(err);
+      }
+    }
+  } else {
+    const headers = {
+      mac: localStorage.getItem("deviceId"),
+    };
+
+    const token = Cookies.get("at");
+    if (token) {
+      headers.Authorization = "Bearer " + token;
+    }
+
+    try {
+      const response = await axios
+        .create({
+          baseURL: apiUrl,
+          headers: headers,
+        })
+        .get(url);
+      return response.data.data;
+    } catch (err) {
+      if (err.response.status === 401) {
+        await refreshTokenAction();
+        const response = await axios
+          .create({
+            baseURL: apiUrl,
+            headers: headers,
+          })
+          .get(url);
+        return response.data.data;
+      } else {
+        console.error(err);
+      }
     }
   }
 };

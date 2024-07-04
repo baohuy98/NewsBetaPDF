@@ -70,7 +70,7 @@ export const postApi = async (apiUrl, url, data) => {
         headers: headers,
       })
       .post(url, data);
-      return response.data;
+    return response.data.data;
   } catch (err) {
     if (err.response.status === 401) {
       await refreshTokenAction();

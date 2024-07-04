@@ -67,6 +67,7 @@ const TradingTool = () => {
       dispatch(userLogoutAction());
       window.location.href = "/";
       localStorage.setItem("_il", "4E8WL");
+      localStorage.removeItem("2ZW79");
       localStorage.removeItem("user");
     }
   };
@@ -115,9 +116,9 @@ const TradingTool = () => {
   const gridRef = useRef();
 
   const columnDefs = [
-    { headerName: "Mã", field: "code", width: 90, cellRenderer: DetailComponents, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
-    { headerName: "Giá", field: "closePrice", width: 90, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' } },
-    { headerName: "+/-", field: "perChange", width: 90, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' } },
+    { headerName: "Mã", field: "code", width: role === "XJ20C" ? 130 : 90, cellRenderer: DetailComponents, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
+    { headerName: "Giá", field: "closePrice", width: role === "XJ20C" ? 130 : 90, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' } },
+    { headerName: "+/-", field: "perChange", width: role === "XJ20C" ? 130 : 90, cellClass: (params) =>  getColor(params.data.change), cellStyle: { fontWeight: 'bold', textAlign: 'center' } },
     { headerName: "Giá mục tiêu 2024", field: "price_2024", width: 190, cellStyle: { textAlign: 'center' } },
     { headerName: "Tiềm năng tăng giá 2024 (%)", field: "p_2024", width: 200, cellStyle: { textAlign: 'center' } },
     { headerName: "Giá mục tiêu 2025", field: "price_2025", width: 190, cellStyle: { textAlign: 'center' } },
@@ -126,8 +127,16 @@ const TradingTool = () => {
     { headerName: "Giá trị MA", field: "ma", width: 130, cellStyle: { textAlign: 'center' } },
     { headerName: "Hiệu suất sinh lời theo MA (%)", field: "total", width: 280, cellStyle: { textAlign: 'center' } },
     { headerName: "Tín hiệu", field: "signal", width: 130, cellClass: (params) =>  params.value == 'MUA' ? 'text-green-500' : (params.value == 'BÁN' ? 'text-red-500' : (params.value == 'Hold mua' ? 'text-green-500' : 'text-red-500')), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
-    { headerName: "", field: "actions", width: 120, cellRenderer: (params)=> <ActionComponents params={params} setData={setData} showModal={showModal}/> },
   ];
+
+  if (role === "8Z5M8") {
+    columnDefs.push({
+        headerName: "",
+        field: "actions",
+        width: 120,
+        cellRenderer: (params) => <ActionComponents params={params} setData={setData} showModal={showModal}/>
+    });
+}
   
   const defaultColDef = useMemo(() => {
     return {
@@ -299,7 +308,8 @@ const TradingTool = () => {
         </div>
       
         <div className="w-full h-[919px] p-[40px]">
-          <div className="flex justify-start content-center mb-[15px]">
+          {role === "8Z5M8" && (
+            <div className="flex justify-start content-center mb-[15px]">
               <div>
                 <Button variant="contained" color="test" onClick={showModalAdd}>
                   <FaPlusCircle className="w-[20px] h-[20px] text-white" />
@@ -308,7 +318,9 @@ const TradingTool = () => {
                   </span>
                 </Button>
               </div>
-          </div>
+            </div>
+          )}
+          
           <div className="w-full h-[787px]">
             <div className="example-wrapper">
               <div className={"ag-theme-quartz w-full h-full"}>
