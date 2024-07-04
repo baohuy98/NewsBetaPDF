@@ -332,7 +332,7 @@ const TableResults = ({ filteredResults, watchlists, catchWatchlists, selectedIt
     "changeStatusTrend",
     "changeStatusTech",
     "changeStatusGeneral",
-    ""
+    "",
   ];
 
   const dynamicColumns = selectedItems
@@ -355,7 +355,7 @@ const TableResults = ({ filteredResults, watchlists, catchWatchlists, selectedIt
       }
 
       const dataIndex =
-        flatFilterItem.key === "avg_totalVol_"
+        flatFilterItem.key === "avg_totalVol_" || flatFilterItem.key === "perChangeOmVol_"
           ? `${flatFilterItem.key}${selectParameters}`
           : flatFilterItem.key;
 

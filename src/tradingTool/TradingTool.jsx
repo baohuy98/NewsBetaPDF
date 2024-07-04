@@ -16,6 +16,7 @@ import socket from "../helper/socket.js";
 import ActionComponents from "./components/ActionComponents.jsx";
 import DetailComponents from "./components/DetailComponents.jsx";
 import "./utils/styles/styles.css";
+import EditModal from "./components/EditModal.jsx";
 
 const apiUrl = process.env.REACT_APP_BASE_URL;
 const flashClass = {
@@ -25,13 +26,9 @@ const flashClass = {
 };
 
 const getColor = (item) => {
-  let color = "";
-
-  if (item === 0) color = "text-yellow-500";
-  else if (item < 0) color = "text-red-500";
-  else color = "text-green-500";
-
-  return color;
+  if (item < 0) return "text-red-500";
+  if (item > 0) return "text-green-500";
+  return "text-yellow-500";
 };
 
 const theme = createTheme({
@@ -54,6 +51,14 @@ const TradingTool = () => {
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState();
+
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [dataEdit, setDataEdit] = useState();
+
+  const showModal = (data) => {
+    setIsModalEditOpen(true);
+    setDataEdit(data);
+  };
 
   const handleUserLogout = () => {
     if (isLogin) {
@@ -88,7 +93,7 @@ const TradingTool = () => {
           key: index,
           id: item.code,
           closePrice,
-          signal_text: item.signal == 0 ? "MUA" : item.signal == 1 ? "BÁN" : item.signal == 2 ? "Hold mua" : "Hold bán",
+          signal: item.signal == 0 ? "MUA" : item.signal == 1 ? "BÁN" : item.signal == 2 ? "Hold mua" : "Hold bán",
           total: parseFloat((item.total * 100).toFixed(2)),
           price_2024: parseFloat(item.price_2024.toFixed(2)),
           price_2025: parseFloat(item.price_2025.toFixed(2)),
@@ -120,8 +125,8 @@ const TradingTool = () => {
     { headerName: "MA", field: "name", width: 110, cellStyle: { textAlign: 'center' } },
     { headerName: "Giá trị MA", field: "ma", width: 130, cellStyle: { textAlign: 'center' } },
     { headerName: "Hiệu suất sinh lời theo MA (%)", field: "total", width: 280, cellStyle: { textAlign: 'center' } },
-    { headerName: "Tín hiệu", field: "signal_text", width: 130, cellClass: (params) =>  params.value == 'MUA' ? 'text-green-500' : (params.value == 'BÁN' ? 'text-red-500' : (params.value == 'Hold mua' ? 'text-green-500' : 'text-red-500')), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
-    { headerName: "", field: "actions", width: 120, cellRenderer: (params)=> <ActionComponents params={params} setData={setData}/> },
+    { headerName: "Tín hiệu", field: "signal", width: 130, cellClass: (params) =>  params.value == 'MUA' ? 'text-green-500' : (params.value == 'BÁN' ? 'text-red-500' : (params.value == 'Hold mua' ? 'text-green-500' : 'text-red-500')), cellStyle: { fontWeight: 'bold', textAlign: 'center' }},
+    { headerName: "", field: "actions", width: 120, cellRenderer: (params)=> <ActionComponents params={params} setData={setData} showModal={showModal}/> },
   ];
   
   const defaultColDef = useMemo(() => {
@@ -139,80 +144,84 @@ const TradingTool = () => {
 
   useEffect(() => { 
     if (socketConnected && data?.length > 0) {
-      socket.on(`listen-ma-co-phieu`, (newData) => {
-        const item = data.find(item => item.code == newData[0].code)
+      socket.on(`listen-ma-co-phieu`, (res) => {
+        setData(prevData => {
+          const index = prevData.findIndex(item => item.code == res[0].code);
 
-        const closePrice = parseFloat(item.closePrice.toFixed(2));
-        const newClosePrice = parseFloat((newData[0].closePrice / 1000).toFixed(2));
-        const closePricePrev = parseFloat((item.closePricePrev / 1000).toFixed(2));
-        const change = parseFloat(((newClosePrice - closePricePrev) / closePricePrev * 100).toFixed(2))
+          if (index === -1) {
+            console.error("Không tìm thấy mục với code:", res[0].code);
+            return prevData;
+          }
 
-        if (closePrice !== newClosePrice) {
-          const newItem = {
-            ...item,
-            closePrice: newClosePrice,
-            ma: parseFloat((newData[0].ma / 1000).toFixed(2)),
-            signal: newData[0].signal == 0 ? 'MUA' : newData[0].signal == 1 ? 'BÁN' : newData[0].signal == 2 ? 'Hold mua' : 'Hold bán',
-            p_2024: item.price_2024 ? parseFloat(((item.price_2024 - newClosePrice) / newClosePrice * 100).toFixed(2)) : 0,
-            p_2025: item.price_2025 ? parseFloat(((item.price_2025 - newClosePrice) / newClosePrice * 100).toFixed(2)) : 0,
-            total: parseFloat((newData[0].total * 100).toFixed(2)),
-            change,
-            perChange: change + '%'
-          };
+          const item = prevData[index];
+          const closePrice = parseFloat(item.closePrice.toFixed(2));
+          const newClosePrice = parseFloat((res[0].closePrice / 1000).toFixed(2));
+          const closePricePrev = parseFloat((item.closePricePrev / 1000).toFixed(2));
+          const change = parseFloat(((newClosePrice - closePricePrev) / closePricePrev * 100).toFixed(2))
 
-          const rowNode = gridRef?.current?.api?.getRowNode(newItem.code);
+          if (closePrice !== newClosePrice) {
+            const newItem = {
+              ...item,
+              closePrice: newClosePrice,
+              ma: parseFloat((res[0].ma / 1000).toFixed(2)),
+              signal: res[0].signal == 0 ? 'MUA' : res[0].signal == 1 ? 'BÁN' : res[0].signal == 2 ? 'Hold mua' : 'Hold bán',
+              p_2024: item.price_2024 ? parseFloat(((item.price_2024 - newClosePrice) / newClosePrice * 100).toFixed(2)) : 0,
+              p_2025: item.price_2025 ? parseFloat(((item.price_2025 - newClosePrice) / newClosePrice * 100).toFixed(2)) : 0,
+              total: parseFloat((res[0].total * 100).toFixed(2)),
+              change,
+              perChange: change + '%'
+            };
 
-          if (rowNode) {
-            const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
-            const columnIds = ["closePrice", "perChange", "ma", "p_2024", "p_2025", "total"];
-            const className = newClosePrice > closePricePrev ? flashClass.up : (newClosePrice < closePricePrev ? flashClass.down : flashClass.ref);
+            const rowNode = gridRef?.current?.api?.getRowNode(newItem.code);
+            if (rowNode) {
+              const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
+              const columnIds = ["closePrice", "perChange", "ma", "p_2024", "p_2025", "total"];
+              const className = newClosePrice > closePricePrev ? flashClass.up : (newClosePrice < closePricePrev ? flashClass.down : flashClass.ref);
 
-             // Add the class name for visual feedback
-            columnIds.forEach(colId => {
-              const cellElement = rowElement?.querySelector(`[col-id="${colId}"]`);
-              if (cellElement) {
-                cellElement.classList.add(className);
-              }
-            });
-
-            // Update the cell values
-            columnIds.forEach(colId => {
-              if (newItem.hasOwnProperty(colId)) {
-                rowNode.setDataValue(colId, newItem[colId]);
-              }
-            });
-
-            // Remove the class names after 500 milliseconds
-            setTimeout(() => {
+              // Add the class name for visual feedback
               columnIds.forEach(colId => {
                 const cellElement = rowElement?.querySelector(`[col-id="${colId}"]`);
                 if (cellElement) {
-                  cellElement.classList.remove(flashClass.up, flashClass.down, flashClass.ref);
+                  cellElement.classList.add(className);
                 }
               });
-            }, 500);
 
+              
+
+               // Remove the class names after 500 milliseconds
+              setTimeout(() => {
+                columnIds.forEach(colId => {
+                  const cellElement = rowElement?.querySelector(`[col-id="${colId}"]`);
+                  if (cellElement) {
+                    cellElement.classList.remove(flashClass.up, flashClass.down, flashClass.ref);
+                  }
+                });
+              }, 500);
+            }
+
+            const signal = res[0].signal == 0 ? 'MUA' : (res[0].signal == 1 ? 'BÁN': (res[0].signal == 2 ? 'Hold mua' : 'Hold bán')) 
+
+            if (rowNode && (item.signal != signal)) {
+              const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
+              const childElementSignal = rowElement?.querySelector('[col-id="signal"]');
+              const classNameSignal = (res[0].signal === 0 || res[0].signal === 2) ? flashClass.up : flashClass.down;
+          
+              childElementSignal?.classList.add(classNameSignal);
+          
+              setTimeout(() => {
+                childElementSignal?.classList.remove(classNameSignal);
+              }, 500);
+            }
+
+            const newData = [...prevData];
+            newData[index] = newItem;
+
+            return newData;
           }
+          return prevData;
+        })
+      })
 
-          const signal = newData[0].signal == 0 ? 'MUA' : (newData[0].signal == 1 ? 'BÁN': (newData[0].signal == 2 ? 'Hold mua' : 'Hold bán')) 
-          if (rowNode && (item.signal != signal)) {
-            const rowElement = document.querySelector(`[row-id="${newItem.code}"]`);
-            const childElementSignal = rowElement?.querySelector('[col-id="signal_text"]')
-            const classNameSignal = (newData[0].signal == 0 || newData[0].signal == 2) ? flashClass.up : flashClass.down
-
-            // Add the class name for visual feedback
-            childElementSignal?.classList.add(classNameSignal)
-
-            // Update the signal value
-            rowNode.setDataValue('signal_text', signal);
-
-            // Remove the class name after 500 milliseconds
-            setTimeout(() => {
-                childElementSignal?.classList.remove(classNameSignal)
-            }, 500)
-          }
-        }
-      });
     }
 
     return () => {
@@ -316,6 +325,8 @@ const TradingTool = () => {
             </div>
           </div>
         </div>
+
+        {/* Modal ADD */}
         <Modal
           centered
           width={500}
@@ -335,6 +346,14 @@ const TradingTool = () => {
             </form>
           </div>
         </Modal>
+
+        {/* Modal EDIT */}
+        <EditModal
+          dataEdit={dataEdit}
+          setData={setData}
+          isModalEditOpen={isModalEditOpen}
+          setIsModalEditOpen={setIsModalEditOpen}
+        />
       </div>
     </ThemeProvider>
   );
