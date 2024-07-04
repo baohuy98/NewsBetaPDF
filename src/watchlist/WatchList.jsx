@@ -45,6 +45,7 @@ const WatchList = () => {
       setRole(null);
       dispatch(userLogoutAction());
       localStorage.setItem("_il", "4E8WL");
+      localStorage.removeItem("2ZW79");
       localStorage.removeItem("user");
       navigate("/");
     }

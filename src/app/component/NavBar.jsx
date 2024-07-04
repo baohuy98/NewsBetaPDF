@@ -139,7 +139,7 @@ const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user, role }) => {
               >
                 Phân tích
               </h3>
-              {role === "V0U1S" ? (
+              {role === "8Z5M8" ? (
                 <NavLink
                   to={"/phan-tich-ky-thuat/FPT"}
                   className={
@@ -211,8 +211,9 @@ const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user, role }) => {
                 <HiOutlineLightBulb />,
                 "BETA SMART"
               )}
-
-              {role === "V0U1S" ? (
+              {role === "V0U1S" || !role ? (
+                <></>
+              ) : (
                 <div>
                   {buttonNavLink(
                     "/trading-tool",
@@ -220,8 +221,6 @@ const NavBar = ({ isLogin, handleUserLogout, onSubmitSuccess, user, role }) => {
                     "Trading Tool"
                   )}
                 </div>
-              ) : (
-                <></>
               )}
             </div>
           </div>

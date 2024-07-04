@@ -9,6 +9,7 @@ import NavBar from "../app/component/NavBar";
 import StrategyMA from "./components/StrategyMA";
 import { selectTradingStrategy } from "./utils/hashTb";
 import "./utils/styles/cssDatePicker.css";
+import StrategyMAVVIP from "./components/StrategyMAVVIP";
 
 const theme = createTheme({
   palette: {
@@ -44,7 +45,9 @@ const TradingStrategies = () => {
       setIsLogin(null);
       setRole(null);
       dispatch(userLogoutAction());
+      window.location.href = "/";
       localStorage.setItem("_il", "4E8WL");
+      localStorage.removeItem("2ZW79");
       localStorage.removeItem("user");
     }
   };
@@ -81,8 +84,8 @@ const TradingStrategies = () => {
                 Chọn chiến lược giao dịch
               </div>
               <div className="px-4">
-                {Object.keys(selectTradingStrategy).map((key, index) => (
-                  <div key={index}>
+                {Object.keys(selectTradingStrategy).map((key, mainIndex) => (
+                  <div key={mainIndex}>
                     <Checkbox
                       className="font-bold text-[16px]"
                       checked={selectedMainCategory === key}
@@ -91,21 +94,31 @@ const TradingStrategies = () => {
                       {key}
                     </Checkbox>
                     {selectedMainCategory === key &&
-                      selectTradingStrategy[key].map((strategy, index) => (
-                        <div key={index} className="pl-4">
-                          <Checkbox
-                            checked={selectedStrategy === strategy.key}
-                            value={strategy.key}
-                            onChange={() => handleStrategyChange(strategy.key)}
-                          >
-                            {strategy.name === "MA VVIP"
-                              ? role === "V0U1S"
+                      selectTradingStrategy[key]
+                        .filter((strategy) => {
+                          if (role === "8Z5M8" || role === "XJ20C") {
+                            // Show both "MA VVIP" and "MA đại pháp"
+                            return true;
+                          } else {
+                            // Show only "MA đại pháp"
+                            return strategy.name !== "MA VVIP";
+                          }
+                        })
+                        .map((strategy, strategyIndex) => (
+                          <div key={strategyIndex} className="pl-4">
+                            <Checkbox
+                              checked={selectedStrategy === strategy.key}
+                              value={strategy.key}
+                              onChange={() =>
+                                handleStrategyChange(strategy.key)
+                              }
+                            >
+                              {strategy.name === "MA VVIP"
                                 ? "MA VVIP"
-                                : "MA đại pháp"
-                              : strategy.name}
-                          </Checkbox>
-                        </div>
-                      ))}
+                                : strategy.name}
+                            </Checkbox>
+                          </div>
+                        ))}
                   </div>
                 ))}
               </div>
@@ -130,6 +143,16 @@ const TradingStrategies = () => {
                     </div>
                   </motion.div>
                 )}
+                {selectedStrategy === "StrategyMAVip" && (
+                  <motion.div
+                    key="StrategyMAVip"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                  >
+                    <StrategyMAVVIP />
+                  </motion.div>
+                )}
                 {selectedStrategy === "StrategyMA" && (
                   <motion.div
                     key="StrategyMA"
@@ -138,16 +161,6 @@ const TradingStrategies = () => {
                     transition={{ duration: 1 }}
                   >
                     <StrategyMA />
-                  </motion.div>
-                )}
-                {selectedStrategy === "1" && (
-                  <motion.div
-                    key="1"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                  >
-                    1
                   </motion.div>
                 )}
                 {selectedStrategy === "2" && (
