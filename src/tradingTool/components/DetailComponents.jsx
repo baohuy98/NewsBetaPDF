@@ -107,16 +107,16 @@ export default (params) => {
             <p className="m-1">:</p>
             <p
               className={`m-1 w-[25%] text-end font-semibold ${
-                dataDetail?.signal_text == "MUA"
+                dataDetail?.signal == "MUA"
                   ? "text-green-500"
-                  : dataDetail?.signal_text == "BÁN"
+                  : dataDetail?.signal == "BÁN"
                   ? "text-red-500"
-                  : dataDetail?.signal_text == "Hold mua"
+                  : dataDetail?.signal == "Hold mua"
                   ? "text-green-500"
                   : "text-red-500"
               }`}
             >
-              {dataDetail?.signal_text}
+              {dataDetail?.signal}
             </p>
           </div>
         </div>

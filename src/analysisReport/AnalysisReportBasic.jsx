@@ -14,7 +14,6 @@ const AnalysisReportBasic = () => {
       setIsLogin(null);
       setRole(null);
       dispatch(userLogoutAction());
-      window.location.href = "/";
       localStorage.setItem("_il", "4E8WL");
       localStorage.removeItem("2ZW79");
       localStorage.removeItem("user");
