@@ -32,6 +32,7 @@ const EditModal = ({ dataEdit, setData, isModalEditOpen, setIsModalEditOpen }) =
         ma: e.target[6]?.value || 0,
         is_beta_page: 1,
       });
+      console.log(res)
       setData((prev) => {
         const thisItem = prev.find((item) => item.code == e.target[0].value);
         const newP2024 = parseFloat(((price_2024 - thisItem.closePrice) / thisItem.closePrice) * 100).toFixed(2);
@@ -47,9 +48,9 @@ const EditModal = ({ dataEdit, setData, isModalEditOpen, setIsModalEditOpen }) =
           p_2024: newP2024,
           p_2025: newP2025,
           name: `MA_${e.target[6]?.value}`,
-          ma: parseFloat((res.data[0].ma / 1000).toFixed(2)),
-          total: parseFloat((res.data[0].total * 100).toFixed(2)),
-          signal: res.data[0].signal == 0 ? "MUA" : res.data[0].signal == 1 ? "BÁN" : res.data[0].signal == 2 ? "Hold mua" : "Hold bán",
+          ma: parseFloat((res[0].ma / 1000).toFixed(2)),
+          total: parseFloat((res[0].total * 100).toFixed(2)),
+          signal: res[0].signal == 0 ? "MUA" : res[0].signal == 1 ? "BÁN" : res[0].signal == 2 ? "Hold mua" : "Hold bán",
         };
         return newData;
       });

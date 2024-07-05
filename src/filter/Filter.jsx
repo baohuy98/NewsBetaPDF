@@ -111,7 +111,6 @@ const Filter = () => {
       setIsLogin(null);
       setRole(null);
       dispatch(userLogoutAction());
-      window.location.href = "/";
       localStorage.setItem("_il", "4E8WL");
       localStorage.removeItem("2ZW79");
       localStorage.removeItem("user");
@@ -403,9 +402,13 @@ const Filter = () => {
                   />
                 </div>
                 <div className="mt-1">
-                  <Button variant="contained" color="mau" onClick={clearConditions}>
+                  <Button
+                    variant="contained"
+                    color="mau"
+                    onClick={clearConditions}
+                  >
                     <FiFilePlus className="w-[25px] h-[25px] text-white" />
-                    <span className="normal-case pl-1 text-[14px] font-semibold text-white" >
+                    <span className="normal-case pl-1 text-[14px] font-semibold text-white">
                       Tạo bộ lọc mới
                     </span>
                   </Button>

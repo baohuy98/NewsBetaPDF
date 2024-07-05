@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import DialogLogin from "../Auth/components/DialogLogin";
 import { userLogoutAction } from "../Auth/thunk";
 import NavBar from "../app/component/NavBar";
@@ -12,7 +11,6 @@ const apiUrl = process.env.REACT_APP_BASE_URL;
 
 const WatchList = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(localStorage.getItem("_il"));
   const [role, setRole] = useState(localStorage.getItem("2ZW79"));
@@ -47,7 +45,6 @@ const WatchList = () => {
       localStorage.setItem("_il", "4E8WL");
       localStorage.removeItem("2ZW79");
       localStorage.removeItem("user");
-      navigate("/");
     }
   };
 
